@@ -5,7 +5,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import BouncyCheckbox from 'react-native-bouncy-checkbox'
 //import {Colors} from 'react-native-paper'
 
-import Pill from './Pill'
 import * as D from '../data'
 
 const name = D.randomName()
@@ -18,7 +17,6 @@ const pressImg = () => { Alert.alert('더 커진 이미지창 넣을 예정^^') 
 
 const pills = D.makeArray(5).map((notUsed) => D.randomPillUrl()) //notUsed //pill을 담는 pills array
 
-
 export default function Schedule() {
 
     const children = pills.map((pillUrl, index) => ( //약 목록에 넣을 data를 일단 faker로 생성해서 배열 형성. 나중에 db로 가져와야 함.
@@ -30,8 +28,6 @@ export default function Schedule() {
                 <BouncyCheckbox size={20} fillColor="red" unfillColor="#FFFFFF" iconStyle={{ borderColor: "red" }} />
             </View >
         </View>
-
-
 
     ))
 
