@@ -25,7 +25,6 @@ export default function StackTabs() {
                     component={Main}
                     options={{
                         tabBarLabel: 'Home',
-
                         tabBarIcon: ({ focused }) => (
                             <Icon name="home" size={25} />
                         ),

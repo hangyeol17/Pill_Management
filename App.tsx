@@ -27,10 +27,6 @@ export default function App() {
   //return (isLoading ? (children[0]) : (children[1])) //로딩이 완료되면 메인페이지로
 
   Permission()
-  const devices = useCameraDevices()
-  const device = devices.back
-
-  if (device == null) return <ActivityIndicator />
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
