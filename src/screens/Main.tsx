@@ -7,7 +7,7 @@ import Content from './Content'
 
 import * as D from '../data'
 
-export default function Loading() {
+export default function Main() {
     return (
         <SafeAreaView style={[styles.flex]}>
             <TopBar />

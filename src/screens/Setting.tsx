@@ -8,7 +8,7 @@ import * as D from '../data'
 
 const loginPress = () => Alert.alert('login pressed', 'hi')
 
-export default function Loading() {
+export default function Setting() {
     return (
         <SafeAreaView style={[styles.flex]}>
             <View style={[styles.view]}>
