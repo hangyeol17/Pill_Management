@@ -75,7 +75,7 @@ const renderItem = (item) => {
     <Agenda
         items={items}
         loadItemsForMonth={loadItems}
-        selected={'2022-07-07'}
+        selected={'2023-06-01'}
         refreshControl={null}
         showClosingKnob={true}
         refreshing={false}
