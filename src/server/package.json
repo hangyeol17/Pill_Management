@@ -4,9 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node index"
+    "start": "node server"
   },
   "dependencies": {
-    
+    "mysql": "^2.18.1"
   }
 }
