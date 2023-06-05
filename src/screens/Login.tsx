@@ -1,11 +1,12 @@
 import React from 'react'
 import { StyleSheet, SafeAreaView, View, Text, Image } from 'react-native'
 import { TextInput, Button, TouchableOpacity, TouchableHighlight, Alert } from 'react-native'
+import Register from './Register'
+import StackTab from './StackTab'
 
 import * as D from '../data'
 
-
-export default function Login() {
+export default function Login({ navigation }) {
     return (
         <SafeAreaView style={[styles.flex]}>
             <View style={[styles.view]}>
@@ -16,9 +17,9 @@ export default function Login() {
                 <Text>아이디</Text>
                 <TextInput style={[styles.input]} defaultValue="" placeholder="여기를 눌러 아이디를 입력하세요"></TextInput>
                 <Text>비밀번호</Text>
-                <TextInput style={[styles.input]} defaultValue="" placeholder="여기를 눌러 비밀번호를 입력하세요"></TextInput>
-                <TouchableHighlight style={[styles.loginBut]}><Button title="로그인" onPress={() => StackTabs()}></Button></TouchableHighlight>
-                <TouchableHighlight style={[styles.loginBut]}><Button title="회원가입" onPress={() => Register()}></Button></TouchableHighlight>
+                <TextInput style={[styles.input]} defaultValue="" placeholder="여기를 눌러 비밀번호를 입력하세요" secureTextEntry></TextInput>
+                <TouchableHighlight style={[styles.loginBut]}><Button title="로그인" onPress={() => navigation.navigate('StackTab')}></Button></TouchableHighlight>
+                <TouchableHighlight style={[styles.loginBut]}><Button title="회원가입" onPress={() => navigation.navigate('Register')}></Button></TouchableHighlight>
             </View>
         </SafeAreaView >
     )
