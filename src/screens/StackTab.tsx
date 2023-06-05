@@ -36,7 +36,7 @@ export default function StackTabs() {
                     name="Calendar"
                     component={Calendar}
                     options={{
-                        tabBarLabel: 'Calendar2',
+                        tabBarLabel: 'Calendar',
                         tabBarIcon: () => (
                             <Icon name="calendar-blank" size={25} />
                         ),
