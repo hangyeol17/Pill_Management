@@ -5,14 +5,18 @@ import Calendar from './src/screens/Calendar'
 import Setting from './src/screens/Setting'
 import Loading from './src/screens/Loading'
 import Login from './src/screens/Login'
+import Register from './src/screens/Register'
 import Join from './src/screens/Join'
 import InputInfo from './src/screens/InputInfo'
 import AddPill from './src/screens/AddPill'
 import StackTab from './src/screens/StackTab'
 import 'react-native-gesture-handler'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 //푸시 알람
 
+const Stack = createNativeStackNavigator()
 const { width } = Dimensions.get('window')
 const numOfCom = 4
 
@@ -22,7 +26,12 @@ export default function App() {
   //return (isLoading ? (children[0]) : (children[1])) //로딩이 완료되면 메인페이지로
 
   return (
-    <StackTab />
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='Login'>
+        <Stack.Screen name='Login' component={Login} />
+        <Stack.Screen name='Register' component={Register} />
+      </Stack.Navigator>
+    </NavigationContainer>
     //<AddPill />
     //<Login />
     //<Join />
