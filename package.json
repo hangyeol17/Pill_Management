@@ -21,6 +21,7 @@
     "faker": "^6.6.6",
     "moment": "^2.29.4",
     "moment-with-locales-es6": "^1.0.1",
+    "mysql": "^2.18.1",
     "prop-types": "^15.8.1",
     "react": "18.2.0",
     "react-native": "^0.71.8",
