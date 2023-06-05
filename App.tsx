@@ -19,6 +19,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true) //true면 로딩창, false면 메인창이 뜬다.
   const children = [<Loading />, <MainPage />]
 
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false }}>
@@ -32,5 +33,15 @@ export default function App() {
 
 const styles = StyleSheet.create({
   safeAreaView: { flex: 1 },
-  contentContainerStyle: { width: width * numOfCom }
+  contentContainerStyle: { width: width * numOfCom },
+  container: {
+    flex: 1,
+},
+item: {
+    flex: 1,
+    borderRadius: 5,
+    padding: 10,
+    marginRight: 10,
+    marginTop: 17
+},
 })

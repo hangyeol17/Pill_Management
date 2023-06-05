@@ -8,7 +8,17 @@ import TopBar from './TopBar'
 import Pill from '../copy/PillCheck'
 import * as D from '../data'
 
-const name = D.randomName()
+
+
+import { TouchableOpacity, StatusBar } from 'react-native';
+import { Agenda } from 'react-native-calendars';
+import { Card } from 'react-native-paper';
+
+const timeToString = (time) => {
+    const date = new Date(time);
+    return date.toISOString().split('T')[0];
+  }
+/*const name = D.randomName()
 
 const onImg = () => {
     Alert.alert('사용자 정보창');
@@ -16,17 +26,70 @@ const onImg = () => {
 
 const pressImg = () => { Alert.alert('더 커진 이미지창 넣을 예정^^') }
 
-const pills: D.Pill[] = D.makeArray(3).map(D.createRandomPill) //pill을 담는 pills array
+const pills: D.Pill[] = D.makeArray(3).map(D.createRandomPill) pill을 담는 pills array*/
 
 //버튼에 의한 화면전환을 아직 할 수 없음. main을 실행하면 content창, calendar을 실행하면 schedule 창. 이런식으로 일단 만들어놓음 ㅠ
 //어떻게 하는지 아는사람
 export default function Calendar() {
+    const [items, setItems] = React.useState({});
+  const loadItems = (day) => {
 
+    setTimeout(() => {
+        for (let i = -15; i < 85; i++) {
+            const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+            const strTime = timeToString(time);
+
+            if (!items[strTime]) {
+                items[strTime] = [];
+
+                const numItems = Math.floor(Math.random() * 3 + 1);
+                for (let j = 0; j < numItems; j++) {
+                    items[strTime].push({
+                        name: 'Item for ' + strTime + ' #' + j,
+                        height: Math.max(10, Math.floor(Math.random() * 150)),
+                        day: strTime
+                    });
+                }
+            }
+        }
+        const newItems = {};
+        Object.keys(items).forEach(key => {
+            newItems[key] = items[key];
+        });
+        setItems(newItems);
+    }, 1000);
+}
+
+const renderItem = (item) => {
+    return (
+        <TouchableOpacity style={styles.item}>
+            <Card>
+                <Card.Content>
+                    <View>
+                        <Text>{item.name}</Text>
+                    </View>
+                </Card.Content>
+            </Card>
+        </TouchableOpacity>
+    );
     //여유 있으면 Text 변경 추가
     //아래 circleinsdie의 위쪽 name은 사용자 이름, 아래쪽 name은 약 이름이다. 아직 data를 수정하지 않아서 차이는 없음.
+}
     return (
+        <View style={styles.container}>
+    <Agenda
+        items={items}
+        loadItemsForMonth={loadItems}
+        selected={'2022-07-07'}
+        refreshControl={null}
+        showClosingKnob={true}
+        refreshing={false}
+        renderItem={renderItem}
+    />
+    <StatusBar />
+</View>
 
-        <SafeAreaView style={[styles.flex]}>
+        /*<SafeAreaView style={[styles.flex]}>
             <SafeAreaView style={[styles.safearea]}>
                 <View style={[styles.topview]}>
                     <Image
@@ -70,12 +133,12 @@ export default function Calendar() {
                     keyExtractor={(item, index) => index.toString()}
                     ItemSeparatorComponent={() => <View style={styles.seperator} />} />
             </SafeAreaView>
-        </SafeAreaView>
+        </SafeAreaView>*/
     )
 }
 
 const styles = StyleSheet.create({
-    flex: { flex: 1, backgroundColor: 'white' },
+    /*flex: { flex: 1, backgroundColor: 'white' },
     safearea: {
         flex: 1
     },
@@ -172,5 +235,15 @@ const styles = StyleSheet.create({
 
     seperator: {
         borderWidth: 1, borderColor: '#DDDDDD'
+    },*/
+    container: {
+        flex: 1,
     },
+    item: {
+        flex: 1,
+        borderRadius: 5,
+        padding: 10,
+        marginRight: 10,
+        marginTop: 17
+    }
 })

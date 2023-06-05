@@ -30,16 +30,16 @@ export default function StackTabs() {
                 }}
             />
 
-            <Tab.Screen
-                name="Calendar"
-                component={Calendar}
-                options={{
-                    tabBarLabel: 'Calendar2',
-                    tabBarIcon: () => (
-                        <Icon name="calendar-blank" size={25} />
-                    ),
-                }}
-            />
+                <Tab.Screen
+                    name="Calendar"
+                    component={Calendar}
+                    options={{
+                        tabBarLabel: 'Calendar',
+                        tabBarIcon: () => (
+                            <Icon name="calendar-blank" size={25} />
+                        ),
+                    }}
+                />
 
             <Tab.Screen
                 name="Camera"
@@ -51,6 +51,7 @@ export default function StackTabs() {
                     ),
                 }}
             />
+
 
             <Tab.Screen
                 name="Setting"
