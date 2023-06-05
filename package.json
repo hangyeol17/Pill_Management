@@ -17,6 +17,7 @@
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "@react-navigation/stack": "^6.3.16",
+    "express": "^4.18.2",
     "faker": "^6.6.6",
     "moment": "^2.29.4",
     "moment-with-locales-es6": "^1.0.1",

@@ -2,12 +2,10 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-import { NavigationContainer } from '@react-navigation/native';
 import Main from './Main'
 import Cam from './Cam'
 import Calendar from './Calendar'
-import Setting from './Setting'
-//import Colors from 'react-native-paper'
+import User from './User'
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -23,29 +21,29 @@ export default function StackTabs() {
                 name="Home"
                 component={Main}
                 options={{
-                    tabBarLabel: 'Home',
+                    tabBarLabel: '',
                     tabBarIcon: ({ focused }) => (
                         <Icon name="home" size={25} />
                     ),
                 }}
             />
 
-                <Tab.Screen
-                    name="Calendar"
-                    component={Calendar}
-                    options={{
-                        tabBarLabel: 'Calendar',
-                        tabBarIcon: () => (
-                            <Icon name="calendar-blank" size={25} />
-                        ),
-                    }}
-                />
+            <Tab.Screen
+                name="Calendar"
+                component={Calendar}
+                options={{
+                    tabBarLabel: '',
+                    tabBarIcon: () => (
+                        <Icon name="calendar-blank" size={25} />
+                    ),
+                }}
+            />
 
             <Tab.Screen
                 name="Camera"
                 component={Cam}
                 options={{
-                    tabBarLabel: 'Camera',
+                    tabBarLabel: '',
                     tabBarIcon: () => (
                         <Icon name="camera" size={25} />
                     ),
@@ -54,12 +52,12 @@ export default function StackTabs() {
 
 
             <Tab.Screen
-                name="Setting"
-                component={Setting}
+                name="User"
+                component={User}
                 options={{
-                    tabBarLabel: 'Setting',
+                    tabBarLabel: '',
                     tabBarIcon: () => (
-                        <Icon name="cog" size={25} />
+                        <Icon name="account" size={25} />
                     ),
                 }}
             />
@@ -70,6 +68,6 @@ export default function StackTabs() {
 
 const styles = StyleSheet.create({
     bar: {
-        backgroundColor: '#696969', color: 'white'
+        backgroundColor: '#696969', color: 'white', height: '7.5%'
     }
 })
