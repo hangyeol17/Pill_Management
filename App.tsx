@@ -26,12 +26,13 @@ export default function App() {
   //return (isLoading ? (children[0]) : (children[1])) //로딩이 완료되면 메인페이지로
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='Login'>
-        <Stack.Screen name='Login' component={Login} />
-        <Stack.Screen name='Register' component={Register} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    // <NavigationContainer>
+    //   <Stack.Navigator initialRouteName='Login'>
+    //     <Stack.Screen name='Login' component={Login} />
+    //     <Stack.Screen name='Register' component={Register} />
+    //   </Stack.Navigator>
+    // </NavigationContainer>
+    <StackTab />
     //<AddPill />
     //<Login />
     //<Join />
