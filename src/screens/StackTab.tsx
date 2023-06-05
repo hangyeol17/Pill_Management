@@ -13,24 +13,22 @@ const Tab = createMaterialBottomTabNavigator();
 
 export default function StackTabs() {
     return (
-        <NavigationContainer>
-            <Tab.Navigator
-                initialRouteName="Home"
-                activeColor="#FFFFFF"
-                shifting={false}
-                barStyle={styles.bar}>
+        <Tab.Navigator
+            initialRouteName="Home"
+            activeColor="#FFFFFF"
+            shifting={false}
+            barStyle={styles.bar}>
 
-                <Tab.Screen
-                    name="Home"
-                    component={Main}
-                    options={{
-                        tabBarLabel: 'Home',
-                        tabBarIcon: ({ focused }) => (
-                            <Icon name="home" size={25} />
-                        ),
-
-                    }}
-                />
+            <Tab.Screen
+                name="Home"
+                component={Main}
+                options={{
+                    tabBarLabel: 'Home',
+                    tabBarIcon: ({ focused }) => (
+                        <Icon name="home" size={25} />
+                    ),
+                }}
+            />
 
                 <Tab.Screen
                     name="Calendar"
@@ -43,29 +41,29 @@ export default function StackTabs() {
                     }}
                 />
 
-                <Tab.Screen
-                    name="Camera"
-                    component={Cam}
-                    options={{
-                        tabBarLabel: 'Camera',
-                        tabBarIcon: () => (
-                            <Icon name="camera" size={25} />
-                        ),
-                    }}
-                />
+            <Tab.Screen
+                name="Camera"
+                component={Cam}
+                options={{
+                    tabBarLabel: 'Camera',
+                    tabBarIcon: () => (
+                        <Icon name="camera" size={25} />
+                    ),
+                }}
+            />
 
-                <Tab.Screen
-                    name="Setting"
-                    component={Setting}
-                    options={{
-                        tabBarLabel: 'Setting',
-                        tabBarIcon: () => (
-                            <Icon name="cog" size={25} />
-                        ),
-                    }}
-                />
-            </Tab.Navigator>
-        </NavigationContainer>
+
+            <Tab.Screen
+                name="Setting"
+                component={Setting}
+                options={{
+                    tabBarLabel: 'Setting',
+                    tabBarIcon: () => (
+                        <Icon name="cog" size={25} />
+                    ),
+                }}
+            />
+        </Tab.Navigator>
     );
 };
 
