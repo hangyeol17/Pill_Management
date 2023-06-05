@@ -41,15 +41,11 @@ export default function Calendar() {
 
             if (!items[strTime]) {
                 items[strTime] = [];
-
-                const numItems = Math.floor(Math.random() * 3 + 1);
-                for (let j = 0; j < numItems; j++) {
-                    items[strTime].push({
-                        name: 'Item for ' + strTime + ' #' + j,
-                        height: Math.max(10, Math.floor(Math.random() * 150)),
-                        day: strTime
-                    });
-                }
+                items[strTime].push({
+                    name: '9시30분에 약을 드세요 ',
+                    height: Math.max(10, Math.floor(Math.random() * 150)),
+                    day: strTime
+                });
             }
         }
         const newItems = {};
@@ -72,8 +68,7 @@ const renderItem = (item) => {
             </Card>
         </TouchableOpacity>
     );
-    //여유 있으면 Text 변경 추가
-    //아래 circleinsdie의 위쪽 name은 사용자 이름, 아래쪽 name은 약 이름이다. 아직 data를 수정하지 않아서 차이는 없음.
+
 }
     return (
         <View style={styles.container}>
