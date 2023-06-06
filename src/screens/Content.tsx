@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, View, Text, Image, FlatList, SafeAreaView } from 'react-native'
+import { StyleSheet, View, Text, Image, FlatList, SafeAreaView, ListRenderItem } from 'react-native'
 import { Alert, Button } from 'react-native'
 import Pill from '../copy/Pill'
 import * as D from '../data'
@@ -7,8 +7,12 @@ import ocrOutput from '../OCR/output.json'
 
 const name = D.randomName()
 
+const pillData: string[] = []
 const dataLength = JSON.stringify(ocrOutput.images[0].fields[0].inferText.split('\n').length)
-const pills: D.Pill[] = D.makeArray(+dataLength).map(D.createRandomPill) //pill을 담는 pills array
+
+for (let i = 0; i < +dataLength; i++) {
+    pillData[i] = JSON.stringify(ocrOutput.images[0].fields[0].inferText.split('\n')[i].split(' ')[0]).replace(/\"/gi, '')
+}
 
 export default function Content() {
     return (
@@ -29,8 +33,15 @@ export default function Content() {
 
             <View style={styles.scrollview}>
                 <Text style={styles.listname}>내 복용 목록</Text>
-                <FlatList data={pills}
-                    renderItem={({ item }) => <Pill pill={item}></Pill>}
+                <FlatList
+                    data={pillData}
+                    renderItem={({ item }) => (
+                        <View style={styles.listview}>
+                            <View style={styles.centerView}>
+                                <Text style={styles.text}>{item}</Text>
+                            </View>
+                        </View>
+                    )}
                     keyExtractor={(item, index) => index.toString()}
                     ItemSeparatorComponent={() => <View style={styles.seperator} />} />
             </View>
@@ -94,5 +105,40 @@ const styles = StyleSheet.create({
 
     seperator: {
         borderWidth: 1, borderColor: '#DDDDDD'
+    },
+    listview: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10, backgroundColor: 'white',
+        paddingHorizontal: 15,
+    }, //listview 마지막 child에 paddingBottom 추가
+
+    text: { fontSize: 20, textAlign: 'center' },
+    pillImage: { height: 60, width: 60, borderRadius: 30 },
+    centerView: { flex: 1 },
+    editImage: { width: 25, height: 25, opacity: 0.5 },
+    time: {
+        fontSize: 18,
+        width: 100
+    },
+
+    pill: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderColor: 'grey',
+        borderRadius: 20,
+        marginRight: 10,
+    },
+
+    pillText: {
+        padding: 10,
+        fontSize: 16,
+    },
+
+    pillImg: {
+        width: 50,
+        height: 50
     },
 })
