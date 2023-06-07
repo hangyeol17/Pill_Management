@@ -13,7 +13,6 @@ export default function StackTabs() {
     return (
         <Tab.Navigator
             initialRouteName="Home"
-            activeColor="#FFFFFF"
             shifting={false}
             barStyle={styles.bar}>
 
