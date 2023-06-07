@@ -68,6 +68,8 @@ export default function StackTabs() {
 
 const styles = StyleSheet.create({
     bar: {
-        backgroundColor: '#696969', color: 'white', height: '7.5%'
+        backgroundColor: '#99CCFF',
+        color: 'white',
+        height: '7.5%',
     }
 })

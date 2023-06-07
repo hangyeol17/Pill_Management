@@ -1,39 +1,81 @@
-import React from 'react'
-import { StyleSheet, SafeAreaView, Text, Image, View, TextInput, TouchableHighlight, Button } from 'react-native'
-import { Alert } from 'react-native'
-//import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-//import {Colors} from 'react-native-paper'
-
-import * as D from '../data'
-
-const loginPress = () => Alert.alert('login pressed', 'hi')
+import React from 'react';
+import { StyleSheet, SafeAreaView, Text, Image, View, FlatList, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import * as D from '../data';
 
 export default function User() {
+    const navigation = useNavigation()
+
+    const handleItemClick = (item) => {
+        if (item === '개인 정보 변경') {
+            navigation.navigate('UserData');
+        } else {
+            console.log('Clicked:', item);
+        }
+    };
+
+
+    const renderItem = ({ item }) => {
+        return (
+            <TouchableOpacity onPress={() => handleItemClick(item)}>
+                <View style={styles.listItemContainer}>
+                    <Text style={styles.listItemText}>{item}</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    };
+
     return (
-        <SafeAreaView style={[styles.flex]}>
-            <View style={[styles.view]}>
-                <Image source={require('../assets/images/pillimg.png')} style={[styles.mainImage]} />
-                <Text style={[styles.text]}> 약먹을시간 </Text>
+        <SafeAreaView style={styles.container}>
+            <View style={styles.header}>
+                <Image source={require('../assets/images/pillimg.png')} style={styles.mainImage} />
+                <Text style={styles.title}>약먹을 시간</Text>
             </View>
-
-
-            <View style={[styles.list]}>
-                <Text>내정보 변경</Text>
-                <Text>내 건강정보 입력</Text>
-                <Text>내 건강통계</Text>
-                <Text>추천하기</Text>
+            <View style={styles.list}>
+                <FlatList
+                    data={['개인 정보 변경', '건강 정보 입력', '내 건강 통계', '추천하기']}
+                    renderItem={renderItem}
+                    keyExtractor={(_, index) => index.toString()}
+                    contentContainerStyle={{ flexGrow: 1 }}
+                />
             </View>
         </SafeAreaView>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
-    flex: {
-        flex: 1, backgroundColor: 'lightblue', flexDirenctoin: 'column',
-        alignItem: 'center'
+    container: {
+        flex: 1,
+        backgroundColor: 'lightblue',
     },
-    view: { padding: 20, flexDirection: 'row', alignItems: 'center' },
-    mainImage: { width: 20, height: 20, marginRight: 10 },
-    text: { fontSize: 25, color: 'white', textAlign: 'center' },
-    list: { flex: 1 }
-})
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 20,
+    },
+    mainImage: {
+        width: 20,
+        height: 20,
+        marginRight: 10,
+    },
+    title: {
+        fontSize: 25,
+        color: 'white',
+        textAlign: 'left',
+    },
+    list: {
+        flex: 1,
+        paddingHorizontal: 20,
+    },
+    listItemContainer: {
+        backgroundColor: 'white',
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        borderRadius: 8,
+        marginBottom: 12,
+        elevation: 2,
+    },
+    listItemText: {
+        fontSize: 20,
+    },
+});

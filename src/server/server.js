@@ -22,7 +22,7 @@ connection.connect(function (err) {
 app.set('port', process.env.PORT || 3000);
 
 app.get('/', (req, res) => {
-  res.send('메인 페이지... 입니다.');
+  res.send(`메인 페이지... 입니다.${req}`);
 });
 
 app.get('/db', (req, res) => {

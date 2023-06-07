@@ -1,10 +1,6 @@
 import React from 'react'
 import { StyleSheet, SafeAreaView, View, Text, Image } from 'react-native'
 import { TextInput, Button, TouchableOpacity, TouchableHighlight, Alert } from 'react-native'
-import Register from './Register'
-import StackTab from './StackTab'
-
-import * as D from '../data'
 
 export default function Login({ navigation }) {
     return (
