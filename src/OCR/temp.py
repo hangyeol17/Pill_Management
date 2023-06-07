@@ -35,3 +35,4 @@ res = json.loads(response.text.encode('utf8'))
 
 with open(output_file, 'w', encoding='utf-8') as outfile:
     json.dump(res, outfile, indent=4, ensure_ascii=False)
+    
