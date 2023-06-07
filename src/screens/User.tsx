@@ -9,6 +9,8 @@ export default function User() {
     const handleItemClick = (item) => {
         if (item === '개인 정보 변경') {
             navigation.navigate('UserData');
+        } else if (item === '약 정보 입력') {
+            navigation.navigate('PillInfoPage')
         } else {
             console.log('Clicked:', item);
         }
@@ -33,7 +35,7 @@ export default function User() {
             </View>
             <View style={styles.list}>
                 <FlatList
-                    data={['개인 정보 변경', '건강 정보 입력', '내 건강 통계', '추천하기']}
+                    data={['개인 정보 변경', '약 정보 입력', '내 건강 통계', '추천하기']}
                     renderItem={renderItem}
                     keyExtractor={(_, index) => index.toString()}
                     contentContainerStyle={{ flexGrow: 1 }}

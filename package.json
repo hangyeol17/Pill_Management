@@ -19,9 +19,11 @@
     "@react-navigation/stack": "^6.3.16",
     "express": "^4.18.2",
     "faker": "^6.6.6",
+    "fast-xml-parser": "^4.2.4",
     "moment": "^2.29.4",
     "moment-with-locales-es6": "^1.0.1",
     "mysql": "^2.18.1",
+    "path": "^0.12.7",
     "prop-types": "^15.8.1",
     "react": "18.2.0",
     "react-native": "^0.71.8",
@@ -39,8 +41,10 @@
     "react-native-svg": "^13.9.0",
     "react-native-vector-icons": "^9.2.0",
     "react-native-vision-camera": "^2.15.4",
+    "react-native-xml2js": "^1.0.3",
     "react-navigation": "^4.4.4",
-    "react-navigation-stack": "^2.10.4"
+    "react-navigation-stack": "^2.10.4",
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

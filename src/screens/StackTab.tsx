@@ -13,7 +13,6 @@ export default function StackTabs() {
     return (
         <Tab.Navigator
             initialRouteName="Home"
-            activeColor="#FFFFFF"
             shifting={false}
             barStyle={styles.bar}>
 
@@ -23,8 +22,7 @@ export default function StackTabs() {
                 options={{
                     tabBarLabel: '',
                     tabBarIcon: ({ focused }) => (
-                        <Icon name="home" size={25} />
-                    ),
+                        <Icon name="home" size={25} color='white' />),
                 }}
             />
 
@@ -34,7 +32,7 @@ export default function StackTabs() {
                 options={{
                     tabBarLabel: '',
                     tabBarIcon: () => (
-                        <Icon name="calendar-blank" size={25} />
+                        <Icon name="calendar-blank" size={25} color='white' />
                     ),
                 }}
             />
@@ -45,7 +43,7 @@ export default function StackTabs() {
                 options={{
                     tabBarLabel: '',
                     tabBarIcon: () => (
-                        <Icon name="camera" size={25} />
+                        <Icon name="camera" size={25} color='white' />
                     ),
                 }}
             />
@@ -57,7 +55,7 @@ export default function StackTabs() {
                 options={{
                     tabBarLabel: '',
                     tabBarIcon: () => (
-                        <Icon name="account" size={25} />
+                        <Icon name="account" size={25} color='white' />
                     ),
                 }}
             />
@@ -68,7 +66,7 @@ export default function StackTabs() {
 
 const styles = StyleSheet.create({
     bar: {
-        backgroundColor: '#99CCFF',
+        backgroundColor: '#6EBAB1',
         color: 'white',
         height: '7.5%',
     }
