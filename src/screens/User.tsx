@@ -119,7 +119,7 @@ export default function Setting() {
     <View style={{flex:1,}}>
       <TopBar_health />
       <View style={styles.content}>
-      <Text >'날짜 및 시각'</Text>
+      <Text style={{fontSize: 18,fontWeight:'bold',color:'#5AA6AE',}}>   날짜 및 시각</Text>
         <View style={styles.dateButton}>
           <TouchableHighlight onPress={showDatepicker} style={[styles.dateButton1]}>
           <Text style={styles.dateText}>{inputs.dayy || '날짜 선택'}</Text>
@@ -142,50 +142,64 @@ export default function Setting() {
         )}
 
 
-<View style={{flexDirection: 'row', justifyContent: 'flex-end',flex:1,}}>
-  <TouchableOpacity
-    style={[styles.buttonInner]}
-    onPress={handleSaveButton}
-  >
-    <View >
-    <Text style={{ color: '#5AA6AE', fontWeight:'bold',fontSize:18, textAlign:'center',}}>저장</Text>
-    </View>
+<View style={{ flexDirection: 'row', height: '10%',}}>
+<View style={{width:'50%' }}><Text style={{ fontSize: 18, fontWeight: 'bold', color: '#5AA6AE',marginTop:28}}>   현재 상태 입력</Text></View>
+<View style={{width:'50%' }}>
+  <TouchableOpacity style={[styles.buttonInner]} onPress={handleSaveButton}>
+    <Text style={{ color: '#5AA6AE', fontWeight: 'bold', fontSize: 18, textAlign: 'center', textAlignVertical: 'bottom' }}>저장</Text>
   </TouchableOpacity>
   </View>
+</View>
+
 
         <View style={styles.dateButton123}>
-        <Text>맥박 {inputs.pulse}</Text>
-        <TextInput
-          style={styles.dateButton2}
+        
+        <View style={{width:"100%",margin:5,flexDirection:'row',justifyContent:'center',alignItems:'center',height:"45%"}}>
+        <View style={{width:"50%",margin:5,flexDirection:'column',justifyContent:'center',alignItems:'center',}}>
+          <View style={[styles.healthView, { marginLeft:10}]}><Text style={{color:'#FFFFFF',fontSize:18,textAlign:'center',marginTop:3,}}>맥박</Text></View>
+          <TextInput
+          style={[styles.dateButton2, { marginLeft:10}]}
           value={inputs.pulse}
           placeholder="입력하기"
           onChangeText={handleInputChange('pulse')}
-          ref={inputRefs.pulse}
-        />
-        <Text>혈당 {inputs.blood_sugar}</Text>
+          ref={inputRefs.pulse}/>
+          </View>
+        
+        <View style={{width:"50%",margin:5,flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
+        <View style={[styles.healthView, { marginRight:10}]}><Text style={{color:'#FFFFFF',fontSize:18,textAlign:'center',marginTop:3,}}>혈당</Text></View>
         <TextInput
-          style={styles.dateButton2}
+          style={[styles.dateButton2, { marginRight:10}]}
           value={inputs.blood_sugar}
           placeholder="입력하기"
           onChangeText={handleInputChange('blood_sugar')}
           ref={inputRefs.blood_sugar}
         />
-        <Text>혈압 {inputs.blood_pressure}</Text>
-        <TextInput
-          style={styles.dateButton2}
+        </View>
+        </View>
+
+
+        <View style={{width:"100%",margin:5,flexDirection:'row',justifyContent:'center',alignItems:'center',height:"45%"}}>
+        <View style={{width:"50%",margin:5,flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
+          <View style={[styles.healthView, { marginLeft:10}]}><Text style={{color:'#FFFFFF',fontSize:18,textAlign:'center',marginTop:3,}}>혈압</Text></View>
+          <TextInput
+          style={[styles.dateButton2, { marginLeft:10}]}
           value={inputs.blood_pressure}
           placeholder="입력하기"
           onChangeText={handleInputChange('blood_pressure')}
-          ref={inputRefs.blood_pressure}
-        />
-        <Text>체온 {inputs.temperature}</Text>
+          ref={inputRefs.blood_pressure}/>
+          </View>
+        
+        <View style={{width:"50%",margin:5,flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
+        <View style={[styles.healthView, { marginRight:10}]}><Text style={{color:'#FFFFFF',fontSize:18,textAlign:'center',marginTop:3,}}>체온</Text></View>
         <TextInput
-          style={styles.dateButton2}
+          style={[styles.dateButton2, { marginRight:10}]}
           value={inputs.temperature}
           placeholder="입력하기"
           onChangeText={handleInputChange('temperature')}
           ref={inputRefs.temperature}
         />
+        </View>
+        </View>
         </View>
       </View>
     </View>
@@ -207,6 +221,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 10,
+    marginTop:10,
   },
   checkboxLabel: {
     fontSize: 20,
@@ -223,8 +238,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderColor: '#5AA6AE', // 변경된 테두리 색상
     borderWidth: 4, // 테두리 두께
-    borderRadius: 8,
-    height:'30%',
+    borderRadius: 10,
+    height:'25%',
+    marginTop:5,
   },
   dateAndCheckboxWrapper: {
     marginBottom: 20,
@@ -236,6 +252,8 @@ const styles = StyleSheet.create({
     borderWidth: 3.8, // 테두리 두께
     borderRadius: 100,
     width: '55%',
+    height:'27%',
+    marginTop:30,
   },
   dateText: {
     color: '#5AA6AE', // 원하는 색상으로 변경
@@ -243,31 +261,40 @@ const styles = StyleSheet.create({
     fontSize:18,
   },
   dateButton2: {
-    alignItems: 'center',
-    justifyContent: 'center',
     borderColor: '#5AA6AE', // 변경된 테두리 색상
     borderWidth: 4, // 테두리 두께
     borderRadius: 25,
-    width:'25%',
-    height:'13%',
+    width:'55%',
     color: '#5AA6AE',
     textAlign: 'center',
+    height:'57%',
+    fontSize:20,
   },
   buttonInner: {
-    backgroundColor: '#FFFFFF', 
     borderColor: '#5FA9B1', 
     borderWidth: 3.5,
-    width: '20%',
+    width: '40%',
     borderRadius: 19,
-    height:"65%",
+    height:"55%",
+    alignSelf: 'flex-end',
+    marginTop:24,
+
   },
   dateButton123: {
-    alignItems: 'center',
-    justifyContent: 'center',
     borderColor: '#5AA6AE', // 변경된 테두리 색상
     borderWidth: 4, // 테두리 두께
-    borderRadius: 8,
-    height:'50%',
+    borderRadius: 10,
+    height:'55%',
+    marginTop:5,
   },
+  healthView: {
+    borderColor: '#5AA6AE', // 변경된 테두리 색상
+    borderWidth: 4, // 테두리 두께
+    borderRadius: 30,
+    backgroundColor:'#5FA9B1',
+    width:'55%',
+    height:'30%',
+    marginBottom:5,
+  }
   
 });
