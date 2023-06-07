@@ -82,9 +82,14 @@ export default function Cam() {
     const filename = 'test.jpeg';
     await RNFS.moveFile(data, `${RNFS.PicturesDirectoryPath}/${filename}`);
     const imagePath = `${RNFS.PicturesDirectoryPath}/${filename}`;
+    const jsonPath = `${RNFS.PicturesDirectoryPath}/capturedImagePath.json`;
+    const jsonData = JSON.stringify({ capturedImagePath });
+
+    await RNFS.writeFile(jsonPath, jsonData, 'utf8');
     capturedImagePath = imagePath;
     setImageSource(capturedImagePath)
     console.log(`Move Picture to ${imagePath}`);
+    console.log(`Exported capturedImagePath to ${jsonPath}`);
   }
 
   if (device == null) return <ActivityIndicator />;

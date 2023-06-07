@@ -9,6 +9,12 @@ secret_key = 'bEpZb2hMZ1BnYXpuZ3ZQcFlweXpkV094Qkd5aU1obW0='
 image_file = 'pre3.jpg'
 output_file = 'output.json'
 
+with open('capturedImagePath.json', 'r') as file:
+  data = json.load(file)
+  capturedImagePath = data['capturedImagePath']
+
+print(capturedImagePath)
+
 request_json = {
     'images': [
         {

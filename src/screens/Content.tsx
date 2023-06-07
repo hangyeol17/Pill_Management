@@ -1,28 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, FlatList, SafeAreaView, TouchableOpacity, Linking, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
-import UserData from './UserData'
+import ocrOutput from '../OCR/output.json';
+import { imageUrl } from '../data/PillData';
 
 import * as D from '../data';
-import ocrOutput from '../OCR/output.json';
 
 const name = D.randomName();
 let dataLength = 0;
 const pillData = [];
 
-try {
-    dataLength = +JSON.stringify(ocrOutput.images[0].fields[0].inferText.split('\n').length);
-} catch (error) {
-    console.error('Error reading output.json:', error);
-}
+dataLength = +JSON.stringify(ocrOutput.images[0].fields[0].inferText.split('\n').length);
 
 for (let i = 0; i < dataLength; i++) {
-    try {
-        pillData[i] = JSON.stringify(ocrOutput.images[0].fields[0].inferText.split('\n')[i].split(' ')[0]).replace(/\"/gi, '');
-    } catch (error) {
-        console.error('Error processing data:', error);
-    }
+    const name = JSON.stringify(ocrOutput.images[0].fields[0].inferText.split('\n')[i].split(' ')[0]).replace(/\"/gi, '');
+    const itemImageUrl = `https://nedrug.mfds.go.kr/pbp/cmn/itemImageDownload/150488501735800064`
+    // Access imageUrl based on the item index
+    pillData.push({
+        name,
+        imageUrl: itemImageUrl
+    });
 }
 
 export default function Content() {
@@ -36,31 +34,48 @@ export default function Content() {
     const fetchHealthNews = async () => {
         const apiKey = '2d208b3439fc448895a9dd7031ffd4ab';
         const url = `https://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=${apiKey}`;
-
-        try {
-            const response = await fetch(url);
-            const result = await response.json();
-
-            if (result.status === 'ok') {
-                setNews(result.articles);
-            }
-        } catch (error) {
-            console.error(error);
+        const response = await fetch(url);
+        const result = await response.json();
+        if (result.status === 'ok') {
+            setNews(result.articles);
         }
     };
 
-    const renderItem = ({ item }: { item: { id: number; content: string; } }) => (
-        <View style={styles.recommendationItem}>
-            <Text style={styles.recommendationContent}>{item.content}</Text>
-        </View>
-    );
+    const renderPillItem = ({ item }) => {
+        return (
+            <View>
+                <View style={styles.pillItem}>
+                    <Text style={styles.pillText}>{item.name}</Text>
+                </View>
+                <Image source={{ uri: item.imageUrl }} style={styles.pillImage} />
+            </View>
+        );
+    };
 
-    const keyExtractor = (item: { id: number | undefined }) => {
-        if (typeof item.id === 'undefined') {
-            return `item-${Math.random()}`;
+    const renderItem = ({ item }) => {
+        const openNewsURL = () => {
+            if (item.url) {
+                Linking.openURL(item.url);
+            }
+        };
+
+        return (
+            <TouchableOpacity onPress={openNewsURL}>
+                <View style={styles.recommendationItem}>
+                    <Text style={styles.recommendationContent}>{item.content}</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    };
+
+    const keyExtractor = (item) => {
+        if (item.id) {
+            return item.id.toString();
         }
-
-        return item.id.toString();
+        if (item.url) {
+            return item.url;
+        }
+        return `item-${Math.random()}`;
     };
 
     const toPersonalData = () => {
@@ -73,17 +88,13 @@ export default function Content() {
                 <View style={styles.listHeader}>
                     <Text style={styles.listTitle}>내 복용 목록</Text>
                     <TouchableOpacity onPress={() => toPersonalData()}>
-                        <Icon name="plus" size={24} color="#000" style={styles.plusIcon} />
+                        <Icon name="plus-square" size={24} color="#5AA6AE" style={styles.plusIcon} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.flatlistContainer}>
                     <FlatList
                         data={pillData}
-                        renderItem={({ item }) => (
-                            <View style={styles.pillItem}>
-                                <Text style={styles.pillText}>{item}</Text>
-                            </View>
-                        )}
+                        renderItem={renderPillItem}
                         keyExtractor={(item, index) => index.toString()}
                         ItemSeparatorComponent={() => <View style={styles.separator} />}
                     />
@@ -101,6 +112,7 @@ export default function Content() {
                         ItemSeparatorComponent={() => <View style={styles.separator} />}
                     /></View>
             </View>
+            {imageUrl && <Image source={{ uri: imageUrl }} style={{ width: 200, height: 200 }} />}
         </SafeAreaView>
     );
 }
@@ -108,7 +120,7 @@ export default function Content() {
 const styles = StyleSheet.create({
     safearea: {
         flex: 1,
-        backgroundColor: '#F2F7FD',
+        backgroundColor: '#FAFCFC',
     },
     scrollView: {
         flex: 0.8,
@@ -126,15 +138,15 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         textAlign: 'left',
-        color: '#3854A6',
+        color: '#5AA6AE',
     },
     plusIcon: {
         marginRight: 10,
     },
     flatlistContainer: {
         flex: 1,
-        borderWidth: 2.5,
-        borderColor: '#DDDDDD',
+        borderWidth: 3,
+        borderColor: '#5FA9B1',
         borderRadius: 8,
         overflow: 'hidden',
         marginLeft: 12,
@@ -144,18 +156,23 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     pillItem: {
+        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 10,
         paddingHorizontal: 15,
-        backgroundColor: '#fff',
+        backgroundColor: '#red',
         borderRadius: 8,
         marginVertical: 4,
+    },
+    pillImage: {
+        flex: 1
     },
     pillText: {
         fontSize: 16,
         textAlign: 'left',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: '#5AA6AE'
     },
     separator: {
         height: 2,
@@ -166,16 +183,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingTop: 20,
     },
-    title: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        textAlign: 'left',
-        color: '#3854A6',
-    },
     hrFlatlistContainer: {
         flex: 0.8,
-        borderWidth: 2.5,
-        borderColor: '#DDDDDD',
+        borderWidth: 3,
+        borderColor: '#5FA9B1',
         borderRadius: 8,
         overflow: 'hidden',
         marginLeft: 12,
@@ -190,10 +201,11 @@ const styles = StyleSheet.create({
     recommendationTitle: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#3854A6',
+        color: '#5AA6AE',
     },
     recommendationContent: {
         fontSize: 16,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: '#5AA6AE'
     },
 });

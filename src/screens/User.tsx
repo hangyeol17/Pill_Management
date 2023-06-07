@@ -1,209 +1,32 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableHighlight, Button, Alert, TouchableOpacity } from 'react-native';
-import { Checkbox } from 'react-native-paper';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import axios from 'axios';
-import TopBar_health from './TopBar_health';
+import React from 'react';
+import { StyleSheet, SafeAreaView, Text, Image, View, FlatList, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import * as D from '../data';
 
-interface Inputs {
-  dayy: string;
-  timee: string[];
-  pulse: string;
-  blood_sugar: string;
-  blood_pressure: string;
-  temperature: string;
-}
-
-const timeOptions = [
-  { value: 'morning', label: '아침' },
-  { value: 'lunch', label: '점심' },
-  { value: 'dinner', label: '저녁' },
-];
-
-export default function Setting() {
-  const inputRefs = {
-    pulse: useRef<TextInput>(null),
-    blood_sugar: useRef<TextInput>(null),
-    blood_pressure: useRef<TextInput>(null),
-    temperature: useRef<TextInput>(null),
-  };
-
-  const [inputs, setInputs] = useState<Inputs>({
-    dayy: '',
-    timee: [],
-    pulse: '',
-    blood_sugar: '',
-    blood_pressure: '',
-    temperature: '',
-  });
-
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
-  const handleInputChange = (field: keyof Inputs) => (text: string) => {
-    setInputs((prevInputs) => ({
-      ...prevInputs,
-      [field]: text,
-    }));
-  };
-
-  const handleTimeOptionChange = (option: string) => {
-    setInputs((prevInputs) => {
-      const isChecked = prevInputs.timee.includes(option);
-      let updatedOptions: string[];
-
-      if (isChecked) {
-        updatedOptions = prevInputs.timee.filter((item) => item !== option);
-      } else {
-        updatedOptions = [...prevInputs.timee, option];
-      }
-
-      return {
-        ...prevInputs,
-        timee: updatedOptions,
-      };
-    });
-  };
-
-  const handleSaveButton = () => {
-    console.log('저장 버튼이 클릭되었습니다.');
-    console.log('입력한 데이터:', inputs);
-
-    const isEmpty = Object.values(inputs).some((value) => {
-      if (Array.isArray(value)) {
-        return value.length === 0;
-      }
-      return value.trim() === '';
-    });
-
-    if (isEmpty) {
-      Alert.alert('입력 오류', '모든 입력 칸을 채워주세요.');
-      return;
-    }
-
-    for (const field in inputRefs) {
-      inputRefs[field as keyof typeof inputRefs].current?.clear();
-    }
-
-    executeServerMain();
-  };
-
-  const executeServerMain = async () => {
-    try {
-      await axios.post(`http://192.168.200.162:4903/in`, inputs);
-      console.log(inputs);
-      console.log('서버의 main 함수 실행 완료');
-      Alert.alert('저장 완료', '데이터가 성공적으로 저장되었습니다.');
-    } catch (error) {
-      console.error('서버 연결 에러:', error);
-      Alert.alert('저장 실패', '데이터 저장에 실패했습니다.');
-    }
-  };
-
-  const handleDateChange = (event: any, selectedDate: Date | undefined) => {
-    setShowDatePicker(false);
-
-    if (selectedDate) {
-      const formattedDate = selectedDate.toISOString().split('T')[0];
-      setInputs((prevInputs) => ({
-        ...prevInputs,
-        dayy: formattedDate,
-      }));
-    }
-  };
-
-  const showDatepicker = () => {
-    setShowDatePicker(true);
-  };
-
-  return (
-    <View style={{flex:1,}}>
-      <TopBar_health />
-      <View style={styles.content}>
-      <Text style={{fontSize: 18,fontWeight:'bold',color:'#5AA6AE',}}>   날짜 및 시각</Text>
-        <View style={styles.dateButton}>
-          <TouchableHighlight onPress={showDatepicker} style={[styles.dateButton1]}>
-          <Text style={styles.dateText}>{inputs.dayy || '날짜 선택'}</Text>
-          </TouchableHighlight>
-          <View style={styles.checkboxBox}>
-            {timeOptions.map((option) => (
-              <Checkbox.Item
-                key={option.value}
-                label={option.label}
-                labelStyle={[styles.checkboxLabel, { color: '#5AA6AE' }]}
-                status={inputs.timee.includes(option.value) ? 'checked' : 'unchecked'}
-                color="#5AA6AE"
-                onPress={() => handleTimeOptionChange(option.value)}
-              />
-            ))}
-          </View>
-        </View>
-        {showDatePicker && (
-          <DateTimePicker value={new Date()} mode="date" display="default" onChange={handleDateChange} />
-        )}
+export default function User() {
+    const navigation = useNavigation()
 
 
-<View style={{ flexDirection: 'row', height: '10%',}}>
-<View style={{width:'50%' }}><Text style={{ fontSize: 18, fontWeight: 'bold', color: '#5AA6AE',marginTop:28}}>   현재 상태 입력</Text></View>
-<View style={{width:'50%' }}>
-  <TouchableOpacity style={[styles.buttonInner]} onPress={handleSaveButton}>
-    <Text style={{ color: '#5AA6AE', fontWeight: 'bold', fontSize: 18, textAlign: 'center', textAlignVertical: 'bottom' }}>저장</Text>
-  </TouchableOpacity>
-  </View>
-</View>
+    
 
 
-        <View style={styles.dateButton123}>
-        
-        <View style={{width:"100%",margin:5,flexDirection:'row',justifyContent:'center',alignItems:'center',height:"45%"}}>
-        <View style={{width:"50%",margin:5,flexDirection:'column',justifyContent:'center',alignItems:'center',}}>
-          <View style={[styles.healthView, { marginLeft:10}]}><Text style={{color:'#FFFFFF',fontSize:18,textAlign:'center',marginTop:3,}}>맥박</Text></View>
-          <TextInput
-          style={[styles.dateButton2, { marginLeft:10}]}
-          value={inputs.pulse}
-          placeholder="입력하기"
-          onChangeText={handleInputChange('pulse')}
-          ref={inputRefs.pulse}/>
-          </View>
-        
-        <View style={{width:"50%",margin:5,flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
-        <View style={[styles.healthView, { marginRight:10}]}><Text style={{color:'#FFFFFF',fontSize:18,textAlign:'center',marginTop:3,}}>혈당</Text></View>
-        <TextInput
-          style={[styles.dateButton2, { marginRight:10}]}
-          value={inputs.blood_sugar}
-          placeholder="입력하기"
-          onChangeText={handleInputChange('blood_sugar')}
-          ref={inputRefs.blood_sugar}
-        />
-        </View>
-        </View>
-
-
-        <View style={{width:"100%",margin:5,flexDirection:'row',justifyContent:'center',alignItems:'center',height:"45%"}}>
-        <View style={{width:"50%",margin:5,flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
-          <View style={[styles.healthView, { marginLeft:10}]}><Text style={{color:'#FFFFFF',fontSize:18,textAlign:'center',marginTop:3,}}>혈압</Text></View>
-          <TextInput
-          style={[styles.dateButton2, { marginLeft:10}]}
-          value={inputs.blood_pressure}
-          placeholder="입력하기"
-          onChangeText={handleInputChange('blood_pressure')}
-          ref={inputRefs.blood_pressure}/>
-          </View>
-        
-        <View style={{width:"50%",margin:5,flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
-        <View style={[styles.healthView, { marginRight:10}]}><Text style={{color:'#FFFFFF',fontSize:18,textAlign:'center',marginTop:3,}}>체온</Text></View>
-        <TextInput
-          style={[styles.dateButton2, { marginRight:10}]}
-          value={inputs.temperature}
-          placeholder="입력하기"
-          onChangeText={handleInputChange('temperature')}
-          ref={inputRefs.temperature}
-        />
-        </View>
-        </View>
-        </View>
-      </View>
-    </View>
-  );
+   
+    return (
+        <SafeAreaView style={styles.container}>
+            <View style={styles.header}>
+                <Image source={require('../assets/images/pillimg.png')} style={styles.mainImage} />
+                <Text style={styles.title}>약먹을 시간</Text>
+            </View>
+            <View style={styles.list}>
+                <FlatList
+                    data={['개인 정보 변경', '약 정보 입력', '내 건강 통계', '추천하기']}
+                    renderItem={renderItem}
+                    keyExtractor={(_, index) => index.toString()}
+                    contentContainerStyle={{ flexGrow: 1 }}
+                />
+            </View>
+        </SafeAreaView>
+    );
 }
 
 const styles = StyleSheet.create({

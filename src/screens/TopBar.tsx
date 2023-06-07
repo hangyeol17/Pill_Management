@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#CCCCCC',
         borderBottomWidth: 1,
         justifyContent: 'center',
-        backgroundColor: '#99CCFF',
+        backgroundColor: '#6EBAB1',
     },
     text: {
         fontSize: 24,

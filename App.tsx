@@ -10,6 +10,8 @@ import StackTab from './src/screens/StackTab';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import UserData from './src/screens/UserData';
+import PillInfoPage from './src/data/PillInfoPage';
 
 const Stack = createNativeStackNavigator();
 const { width } = Dimensions.get('window');
@@ -25,6 +27,8 @@ export default function App() {
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="StackTab" component={StackTab} />
+          <Stack.Screen name='UserData' component={UserData} />
+          <Stack.Screen name='PillInfoPage' component={PillInfoPage} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

@@ -1,6 +1,6 @@
-export * from './faker'
-export * from './util'
-export * from './User'
+export * from './faker';
+export * from './util';
+export * from './User';
 
-export * from './createRandomPill'
-export * from './Pill'
+export * from './createRandomPill';
+export * from './PillInfoPage';
