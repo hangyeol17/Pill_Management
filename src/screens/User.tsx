@@ -1,16 +1,9 @@
 import React, { useState, useRef } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableHighlight,
-  Button,
-  Alert,
-} from 'react-native';
-import axios from 'axios';
+import { View, Text, TextInput, StyleSheet, TouchableHighlight, Button, Alert, TouchableOpacity } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import axios from 'axios';
+import TopBar_health from './TopBar_health';
 
 interface Inputs {
   dayy: string;
@@ -123,103 +116,158 @@ export default function Setting() {
   };
 
   return (
-    <View style={styles.container}>
-      <TouchableHighlight onPress={showDatepicker}>
-        <Text style={styles.dateButton}>{inputs.dayy || '날짜 선택'}</Text>
-      </TouchableHighlight>
-      {showDatePicker && (
-        <DateTimePicker
-          value={new Date()}
-          mode="date"
-          display="default"
-          onChange={handleDateChange}
-        />
-      )}
-      <View style={styles.checkboxContainer}>
-        {timeOptions.map((option) => (
-          <View key={option.value} style={styles.checkboxWrapper}>
-            <Checkbox.Item
-              label={option.label}
-              labelStyle={styles.checkboxLabel}
-              status={inputs.timee.includes(option.value) ? 'checked' : 'unchecked'}
-              onPress={() => handleTimeOptionChange(option.value)}
-            />
+    <View style={{flex:1,}}>
+      <TopBar_health />
+      <View style={styles.content}>
+      <Text >'날짜 및 시각'</Text>
+        <View style={styles.dateButton}>
+          <TouchableHighlight onPress={showDatepicker} style={[styles.dateButton1]}>
+          <Text style={styles.dateText}>{inputs.dayy || '날짜 선택'}</Text>
+          </TouchableHighlight>
+          <View style={styles.checkboxBox}>
+            {timeOptions.map((option) => (
+              <Checkbox.Item
+                key={option.value}
+                label={option.label}
+                labelStyle={[styles.checkboxLabel, { color: '#5AA6AE' }]}
+                status={inputs.timee.includes(option.value) ? 'checked' : 'unchecked'}
+                color="#5AA6AE"
+                onPress={() => handleTimeOptionChange(option.value)}
+              />
+            ))}
           </View>
-        ))}
+        </View>
+        {showDatePicker && (
+          <DateTimePicker value={new Date()} mode="date" display="default" onChange={handleDateChange} />
+        )}
+
+
+<View style={{flexDirection: 'row', justifyContent: 'flex-end',flex:1,}}>
+  <TouchableOpacity
+    style={[styles.buttonInner]}
+    onPress={handleSaveButton}
+  >
+    <View >
+    <Text style={{ color: '#5AA6AE', fontWeight:'bold',fontSize:18, textAlign:'center',}}>저장</Text>
+    </View>
+  </TouchableOpacity>
+  </View>
+
+        <View style={styles.dateButton123}>
+        <Text>맥박 {inputs.pulse}</Text>
+        <TextInput
+          style={styles.dateButton2}
+          value={inputs.pulse}
+          placeholder="입력하기"
+          onChangeText={handleInputChange('pulse')}
+          ref={inputRefs.pulse}
+        />
+        <Text>혈당 {inputs.blood_sugar}</Text>
+        <TextInput
+          style={styles.dateButton2}
+          value={inputs.blood_sugar}
+          placeholder="입력하기"
+          onChangeText={handleInputChange('blood_sugar')}
+          ref={inputRefs.blood_sugar}
+        />
+        <Text>혈압 {inputs.blood_pressure}</Text>
+        <TextInput
+          style={styles.dateButton2}
+          value={inputs.blood_pressure}
+          placeholder="입력하기"
+          onChangeText={handleInputChange('blood_pressure')}
+          ref={inputRefs.blood_pressure}
+        />
+        <Text>체온 {inputs.temperature}</Text>
+        <TextInput
+          style={styles.dateButton2}
+          value={inputs.temperature}
+          placeholder="입력하기"
+          onChangeText={handleInputChange('temperature')}
+          ref={inputRefs.temperature}
+        />
+        </View>
       </View>
-      <TextInput
-        style={styles.input}
-        value={inputs.pulse}
-        placeholder="맥박을 입력해주세요.(숫자로)"
-        onChangeText={handleInputChange('pulse')}
-        ref={inputRefs.pulse}
-      />
-      <TextInput
-        style={styles.input}
-        value={inputs.blood_sugar}
-        placeholder="혈당을 입력해주세요.(숫자로)"
-        onChangeText={handleInputChange('blood_sugar')}
-        ref={inputRefs.blood_sugar}
-      />
-      <TextInput
-        style={styles.input}
-        value={inputs.blood_pressure}
-        placeholder="혈압을 입력해주세요.(숫자로)"
-        onChangeText={handleInputChange('blood_pressure')}
-        ref={inputRefs.blood_pressure}
-      />
-      <TextInput
-        style={styles.input}
-        value={inputs.temperature}
-        placeholder="체온을 입력해주세요.(숫자로)"
-        onChangeText={handleInputChange('temperature')}
-        ref={inputRefs.temperature}
-      />
-      <TouchableHighlight style={styles.buttonContainer}>
-        <Button title="저장" onPress={handleSaveButton} />
-      </TouchableHighlight>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  content: {
+    backgroundColor: '#FFFFFF', // 흰색 배경
     padding: 20,
+    height:'92%',
   },
   input: {
     height: 50,
-    width: '100%',
-    marginBottom: 20,
     borderWidth: 1,
     padding: 10,
   },
-  checkboxContainer: {
+  checkboxBox: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
     justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  checkboxWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-    marginRight: 10,
+    padding: 10,
   },
   checkboxLabel: {
-    fontSize: 12,
+    fontSize: 20,
+    fontWeight:'bold'
   },
   buttonContainer: {
-    width: '100%',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    
   },
   dateButton: {
-    height: 50,
-    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: '#5AA6AE', // 변경된 테두리 색상
+    borderWidth: 4, // 테두리 두께
+    borderRadius: 8,
+    height:'30%',
+  },
+  dateAndCheckboxWrapper: {
     marginBottom: 20,
-    borderWidth: 1,
-    padding: 10,
+  },
+  dateButton1: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: '#5AA6AE', // 변경된 테두리 색상
+    borderWidth: 3.8, // 테두리 두께
+    borderRadius: 100,
+    width: '55%',
+  },
+  dateText: {
+    color: '#5AA6AE', // 원하는 색상으로 변경
+    fontWeight:'bold',
+    fontSize:18,
+  },
+  dateButton2: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: '#5AA6AE', // 변경된 테두리 색상
+    borderWidth: 4, // 테두리 두께
+    borderRadius: 25,
+    width:'25%',
+    height:'13%',
+    color: '#5AA6AE',
     textAlign: 'center',
   },
+  buttonInner: {
+    backgroundColor: '#FFFFFF', 
+    borderColor: '#5FA9B1', 
+    borderWidth: 3.5,
+    width: '20%',
+    borderRadius: 19,
+    height:"65%",
+  },
+  dateButton123: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: '#5AA6AE', // 변경된 테두리 색상
+    borderWidth: 4, // 테두리 두께
+    borderRadius: 8,
+    height:'50%',
+  },
+  
 });
