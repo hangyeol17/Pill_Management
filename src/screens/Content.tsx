@@ -1,98 +1,199 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, View, Text, Image, FlatList, SafeAreaView } from 'react-native'
-import { Alert, Button } from 'react-native'
-import Pill from '../copy/Pill'
-import * as D from '../data'
-import ocrOutput from '../OCR/output.json'
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, Text, FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Feather';
+import UserData from './UserData'
 
-const name = D.randomName()
+import * as D from '../data';
+import ocrOutput from '../OCR/output.json';
 
-const dataLength = JSON.stringify(ocrOutput.images[0].fields[0].inferText.split('\n').length)
-const pills: D.Pill[] = D.makeArray(+dataLength).map(D.createRandomPill) //pill을 담는 pills array
+const name = D.randomName();
+let dataLength = 0;
+const pillData = [];
+
+try {
+    dataLength = +JSON.stringify(ocrOutput.images[0].fields[0].inferText.split('\n').length);
+} catch (error) {
+    console.error('Error reading output.json:', error);
+}
+
+for (let i = 0; i < dataLength; i++) {
+    try {
+        pillData[i] = JSON.stringify(ocrOutput.images[0].fields[0].inferText.split('\n')[i].split(' ')[0]).replace(/\"/gi, '');
+    } catch (error) {
+        console.error('Error processing data:', error);
+    }
+}
 
 export default function Content() {
+    const [news, setNews] = useState([]);
+    const navigation = useNavigation()
+
+    useEffect(() => {
+        fetchHealthNews();
+    }, []);
+
+    const fetchHealthNews = async () => {
+        const apiKey = '2d208b3439fc448895a9dd7031ffd4ab';
+        const url = `https://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=${apiKey}`;
+
+        try {
+            const response = await fetch(url);
+            const result = await response.json();
+
+            if (result.status === 'ok') {
+                setNews(result.articles);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const renderItem = ({ item }: { item: { id: number; content: string; } }) => (
+        <View style={styles.recommendationItem}>
+            <Text style={styles.recommendationContent}>{item.content}</Text>
+        </View>
+    );
+
+    const keyExtractor = (item: { id: number | undefined }) => {
+        if (typeof item.id === 'undefined') {
+            return `item-${Math.random()}`;
+        }
+
+        return item.id.toString();
+    };
+
+    const toPersonalData = () => {
+        navigation.navigate('UserData');
+    };
+
     return (
-        <SafeAreaView style={[styles.safearea]}>
-            <View style={[styles.view]}>
-                <View style={[styles.circleview]}>
-                    <View style={[styles.circleinside]}>
-                        <Text>안녕하세요, {name}님</Text>
-                        <View style={[styles.row]}>
-                            <Image style={[styles.mainpillImage]} source={require('../assets/images/test1.jpg')} />
-                            <Text>오늘의 약, 드셨나요?</Text>
-                            <Text></Text>
-                        </View>
-                        <Image style={[styles.mainpillImg]} source={require('../assets/images/pill.jpg')}></Image>
-                    </View>
+        <SafeAreaView style={styles.safearea}>
+            <View style={styles.scrollView}>
+                <View style={styles.listHeader}>
+                    <Text style={styles.listTitle}>내 복용 목록</Text>
+                    <TouchableOpacity onPress={() => toPersonalData()}>
+                        <Icon name="plus" size={24} color="#000" style={styles.plusIcon} />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.flatlistContainer}>
+                    <FlatList
+                        data={pillData}
+                        renderItem={({ item }) => (
+                            <View style={styles.pillItem}>
+                                <Text style={styles.pillText}>{item}</Text>
+                            </View>
+                        )}
+                        keyExtractor={(item, index) => index.toString()}
+                        ItemSeparatorComponent={() => <View style={styles.separator} />}
+                    />
                 </View>
             </View>
-
-            <View style={styles.scrollview}>
-                <Text style={styles.listname}>내 복용 목록</Text>
-                <FlatList data={pills}
-                    renderItem={({ item }) => <Pill pill={item}></Pill>}
-                    keyExtractor={(item, index) => index.toString()}
-                    ItemSeparatorComponent={() => <View style={styles.seperator} />} />
+            <View style={styles.container}>
+                <View style={styles.listHeader}>
+                    <Text style={styles.listTitle}>건강 뉴스</Text>
+                </View>
+                <View style={styles.hrFlatlistContainer}>
+                    <FlatList
+                        data={news}
+                        renderItem={renderItem}
+                        keyExtractor={keyExtractor}
+                        ItemSeparatorComponent={() => <View style={styles.separator} />}
+                    /></View>
             </View>
         </SafeAreaView>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
-    safearea: { flex: 1 },
-    view: {
+    safearea: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#F2F7FD',
+    },
+    scrollView: {
+        flex: 0.8,
+        paddingHorizontal: 16,
+        paddingTop: 16,
+    },
+    listHeader: {
+        flexDirection: 'row',
         alignItems: 'center',
-        paddingBottom: 20
+        justifyContent: 'space-between',
+        marginBottom: 16,
+        marginLeft: 20,
     },
-
-    circleview: {
-        //border추가
-        flex: 0,
-        color: 'white',
-        width: 270,
-        height: 270,
-        borderRadius: 135,
-        textAlign: 'center',
-        backgroundColor: 'white',
-        overflow: 'hidden'
+    listTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'left',
+        color: '#3854A6',
     },
-
-    circleinside: {
-        //border추가
+    plusIcon: {
+        marginRight: 10,
+    },
+    flatlistContainer: {
         flex: 1,
-        color: 'white',
-        width: 270,
-        height: 300,
-        borderRadius: 140,
-        textAlign: 'center',
-        backgroundColor: 'white',
-        padding: 40,
+        borderWidth: 2.5,
+        borderColor: '#DDDDDD',
+        borderRadius: 8,
+        overflow: 'hidden',
+        marginLeft: 12,
+        marginRight: 12,
+        marginBottom: 20,
+        backgroundColor: '#FFFFFF',
+        elevation: 5,
     },
-
-    mainpillImage: { height: 80, width: 80, borderRadius: 40 },
-    row: {
-        flex: 1, flexDirection: 'row'
+    pillItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        marginVertical: 4,
     },
-
-    mainpillImg: {
-        width: 300, flex: 1, opacity: 0.7
+    pillText: {
+        fontSize: 16,
+        textAlign: 'left',
+        fontWeight: 'bold'
     },
-
-    scrollview: {
-        flex: 1
+    separator: {
+        height: 2,
+        backgroundColor: '#DDDDDD',
     },
-
-    scroll: {
-        flexDirection: 'column', padding: 30
+    container: {
+        flex: 1,
+        paddingHorizontal: 16,
+        paddingTop: 20,
     },
-
-    listname: {
-        textAlign: 'center'
+    title: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'left',
+        color: '#3854A6',
     },
-
-    seperator: {
-        borderWidth: 1, borderColor: '#DDDDDD'
+    hrFlatlistContainer: {
+        flex: 0.8,
+        borderWidth: 2.5,
+        borderColor: '#DDDDDD',
+        borderRadius: 8,
+        overflow: 'hidden',
+        marginLeft: 12,
+        marginRight: 12,
+        backgroundColor: '#FFFFFF',
+        elevation: 5,
     },
-})
+    recommendationItem: {
+        marginVertical: 10,
+        marginLeft: 10,
+    },
+    recommendationTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#3854A6',
+    },
+    recommendationContent: {
+        fontSize: 16,
+        fontWeight: 'bold'
+    },
+});
