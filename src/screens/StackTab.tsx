@@ -22,7 +22,8 @@ export default function StackTabs() {
                 options={{
                     tabBarLabel: '',
                     tabBarIcon: ({ focused }) => (
-                        <Icon name="home" size={25} color='white' />),
+                        <Icon name="home" size={25} color='white' />
+                    ),
                 }}
             />
 
@@ -32,7 +33,7 @@ export default function StackTabs() {
                 options={{
                     tabBarLabel: '',
                     tabBarIcon: () => (
-                        <Icon name="calendar-blank" size={25} color='white' />
+                        <Icon name="calendar-blank" size={25} color='white'/>
                     ),
                 }}
             />
@@ -43,7 +44,7 @@ export default function StackTabs() {
                 options={{
                     tabBarLabel: '',
                     tabBarIcon: () => (
-                        <Icon name="camera" size={25} color='white' />
+                        <Icon name="camera" size={25} color='white'/>
                     ),
                 }}
             />
@@ -55,7 +56,7 @@ export default function StackTabs() {
                 options={{
                     tabBarLabel: '',
                     tabBarIcon: () => (
-                        <Icon name="account" size={25} color='white' />
+                        <Icon name="account" size={25} color='white'/>
                     ),
                 }}
             />

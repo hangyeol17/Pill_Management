@@ -46,38 +46,94 @@ export default function User() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'lightblue',
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 20,
-    },
-    mainImage: {
-        width: 20,
-        height: 20,
-        marginRight: 10,
-    },
-    title: {
-        fontSize: 25,
-        color: 'white',
-        textAlign: 'left',
-    },
-    list: {
-        flex: 1,
-        paddingHorizontal: 20,
-    },
-    listItemContainer: {
-        backgroundColor: 'white',
-        paddingVertical: 12,
-        paddingHorizontal: 16,
-        borderRadius: 8,
-        marginBottom: 12,
-        elevation: 2,
-    },
-    listItemText: {
-        fontSize: 20,
-    },
+  content: {
+    backgroundColor: '#FFFFFF', // 흰색 배경
+    padding: 20,
+    height:'92%',
+  },
+  input: {
+    height: 50,
+    borderWidth: 1,
+    padding: 10,
+  },
+  checkboxBox: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    marginTop:10,
+  },
+  checkboxLabel: {
+    fontSize: 20,
+    fontWeight:'bold'
+  },
+  buttonContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    
+  },
+  dateButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: '#5AA6AE', // 변경된 테두리 색상
+    borderWidth: 4, // 테두리 두께
+    borderRadius: 10,
+    height:'25%',
+    marginTop:5,
+  },
+  dateAndCheckboxWrapper: {
+    marginBottom: 20,
+  },
+  dateButton1: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: '#5AA6AE', // 변경된 테두리 색상
+    borderWidth: 3.8, // 테두리 두께
+    borderRadius: 100,
+    width: '55%',
+    height:'27%',
+    marginTop:30,
+  },
+  dateText: {
+    color: '#5AA6AE', // 원하는 색상으로 변경
+    fontWeight:'bold',
+    fontSize:18,
+  },
+  dateButton2: {
+    borderColor: '#5AA6AE', // 변경된 테두리 색상
+    borderWidth: 4, // 테두리 두께
+    borderRadius: 25,
+    width:'55%',
+    color: '#5AA6AE',
+    textAlign: 'center',
+    height:'57%',
+    fontSize:20,
+  },
+  buttonInner: {
+    borderColor: '#5FA9B1', 
+    borderWidth: 3.5,
+    width: '40%',
+    borderRadius: 19,
+    height:"55%",
+    alignSelf: 'flex-end',
+    marginTop:24,
+
+  },
+  dateButton123: {
+    borderColor: '#5AA6AE', // 변경된 테두리 색상
+    borderWidth: 4, // 테두리 두께
+    borderRadius: 10,
+    height:'55%',
+    marginTop:5,
+  },
+  healthView: {
+    borderColor: '#5AA6AE', // 변경된 테두리 색상
+    borderWidth: 4, // 테두리 두께
+    borderRadius: 30,
+    backgroundColor:'#5FA9B1',
+    width:'55%',
+    height:'30%',
+    marginBottom:5,
+  }
+  
 });
