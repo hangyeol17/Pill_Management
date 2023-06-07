@@ -15,9 +15,9 @@ interface Inputs {
 }
 
 const timeOptions = [
-  { value: 'mor', label: '아침' },
-  { value: 'lun', label: '점심' },
-  { value: 'din', label: '저녁' },
+  { value: 'morning', label: '아침' },
+  { value: 'lunch', label: '점심' },
+  { value: 'dinner', label: '저녁' },
 ];
 
 export default function Setting() {
