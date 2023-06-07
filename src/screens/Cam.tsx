@@ -83,7 +83,6 @@ export default function Cam() {
     await RNFS.moveFile(data, `${RNFS.PicturesDirectoryPath}/${filename}`);
     const imagePath = `${RNFS.PicturesDirectoryPath}/${filename}`;
     capturedImagePath = imagePath;
-    NativeModules.CapturedImageModule = { capturedImagePath: imagePath }
     setImageSource(capturedImagePath)
     console.log(`Move Picture to ${imagePath}`);
   }
