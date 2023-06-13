@@ -1,10 +1,10 @@
 {
     "version": "V2",
-    "requestId": "501291bb-efa2-482d-8f3c-e92e4a0e2cfc",
-    "timestamp": 1685972078693,
+    "requestId": "b796c5d2-6945-42f2-ac4c-b233294dc33e",
+    "timestamp": 1686645777229,
     "images": [
         {
-            "uid": "e6cb75e517b140e19c55560e1f006753",
+            "uid": "c8efc642a6e147b1bbe6529e5326fca3",
             "name": "demo",
             "inferResult": "SUCCESS",
             "message": "SUCCESS",
@@ -45,7 +45,7 @@
                             }
                         ]
                     },
-                    "inferText": "레보트로시럽 9 cc 3 ce 3 3\n새로딘시럽(로라타딘) 1 개 1 개 1 3\n유시락스시럽 18 ce 6 ce 3 3\n삼아아토크건조시럽 2 0.6667gm 3 3\n싱카스트츄정5밀리그램(몬테루카 1 정 1 정 1 30\n삼아리도맥스크림 1 개 1 개 1 1",
+                    "inferText": "레보트로시럽 9 cc 3 ce 3 3\n새로딘시럽(로라타딘) 1 개 1 개 1 3\n유시락스시럽 18 ce 6 ce 3 3\n삼아 아토크건조시럽 2 0.6667gm 3 3\n싱카스트츄정5밀리그램(몬테루카 1 정 1 정 1 30\n삼아리도맥스크림 1 개 1 개 1 1",
                     "inferConfidence": 0.97203416,
                     "type": "NORMAL",
                     "subFields": [
