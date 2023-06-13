@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, FlatList, SafeAreaView, TouchableOpacity, Linking, Image } from 'react-native';
+import { StyleSheet, View, Text, FlatList, SafeAreaView, TouchableOpacity, Linking, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
 import ocrOutput from '../OCR/output.json';
@@ -9,38 +9,69 @@ export default function Content() {
     const [news, setNews] = useState([]);
     const navigation = useNavigation();
     const [pillData, setPillData] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
+    const [resetting, setResetting] = useState(false);
 
-    useEffect(() => {
-        const fetchHealthNews = async () => {
-            const apiKey = '2d208b3439fc448895a9dd7031ffd4ab';
-            const url = `https://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=${apiKey}`;
-            const response = await fetch(url);
-            const result = await response.json();
-            if (result.status === 'ok') {
-                setNews(result.articles);
-            }
-        };
+    const createPillData = () => {
+        const dataLength = ocrOutput?.images?.[0]?.fields?.[0]?.inferText?.split('\n').length || 0;
+        const pillData = [];
 
-        const createPillData = () => {
-            const dataLength = ocrOutput?.images?.[0]?.fields?.[0]?.inferText?.split('\n').length || 0;
-            const pillData = [];
+        for (let i = 0; i < dataLength; i++) {
+            const name = ocrOutput?.images?.[0]?.fields?.[0]?.inferText?.split('\n')?.[i]?.split(' ')?.[0]?.replace(/\"/gi, '');
+            const image = imageUrl && imageUrl[i] ? imageUrl[i] : null;
+            pillData.push({
+                name,
+                image,
+            });
+        }
 
-            for (let i = 0; i < dataLength; i++) {
-                const name = ocrOutput?.images?.[0]?.fields?.[0]?.inferText?.split('\n')?.[i]?.split(' ')?.[0]?.replace(/\"/gi, '');
-                const image = imageUrl && imageUrl[i] ? imageUrl[i] : null;
-                pillData.push({
-                    name,
-                    image,
-                });
-            }
+        return pillData;
+    };
 
-            return pillData;
-        };
+    const fetchHealthNews = async () => {
+        const apiKey = '2d208b3439fc448895a9dd7031ffd4ab';
+        const url = `https://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=${apiKey}`;
+        const response = await fetch(url);
+        const result = await response.json();
+        if (result.status === 'ok') {
+            setNews(result.articles);
+        }
+    };
 
-        fetchHealthNews();
+    const fetchData = async () => {
+        setRefreshing(true);
+
+        await fetchHealthNews();
         const generatedPillData = createPillData();
         setPillData(generatedPillData);
+
+        setRefreshing(false);
+    };
+
+    useEffect(() => {
+        fetchData();
     }, []);
+
+    const handleRefresh = async () => {
+        console.log('refresh button pressed')
+        await fetchData();
+    };
+
+    const handleReset = () => {
+        Alert.alert(
+            '목록 초기화',
+            '약 복용 목록을 초기화 하시겠습니까?',
+            [
+                { text: '취소', style: 'cancel' },
+                { text: '초기화', onPress: () => resetDoseList() },
+            ],
+            { cancelable: false }
+        );
+    };
+
+    const resetDoseList = () => {
+        setPillData([]);
+    };
 
     const renderPillItem = ({ item }) => {
         return (
@@ -92,12 +123,22 @@ export default function Content() {
             <View style={styles.scrollView}>
                 <View style={styles.listHeader}>
                     <Text style={styles.listTitle}>내 복용 목록</Text>
-                    <TouchableOpacity onPress={() => toPersonalData()}>
-                        <Icon name="plus-square" size={24} color="#5AA6AE" style={styles.plusIcon} />
-                    </TouchableOpacity>
+                    <View style={styles.refreshPlusContainer}>
+                        <TouchableOpacity onPress={handleRefresh}>
+                            <Icon name="refresh-cw" size={24} color="#5AA6AE" style={styles.refreshIcon} />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={handleReset}>
+                            <Icon name="x" size={24} color="#5AA6AE" style={styles.resetIcon} />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => toPersonalData()}>
+                            <Icon name="plus-square" size={24} color="#5AA6AE" style={styles.plusIcon} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <View style={styles.flatlistContainer}>
-                    {pillData.length > 0 ? (
+                    {refreshing ? (
+                        <Text style={styles.loadingMessage}>Loading...</Text>
+                    ) : pillData.length > 0 ? (
                         <FlatList
                             data={pillData}
                             renderItem={renderPillItem}
@@ -114,12 +155,15 @@ export default function Content() {
                     <Text style={styles.listTitle}>건강 뉴스</Text>
                 </View>
                 <View style={styles.hrFlatlistContainer}>
-                    <FlatList
-                        data={news}
-                        renderItem={renderItem}
-                        keyExtractor={keyExtractor}
-                        ItemSeparatorComponent={() => <View style={styles.separator} />}
-                    />
+                    {refreshing ? (
+                        <Text style={styles.loadingMessage}>Loading...</Text>
+                    ) :
+                        <FlatList
+                            data={news}
+                            renderItem={renderItem}
+                            keyExtractor={keyExtractor}
+                            ItemSeparatorComponent={() => <View style={styles.separator} />}
+                        />}
                 </View>
             </View>
         </SafeAreaView>
@@ -142,6 +186,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginBottom: 16,
         marginLeft: 20,
+        marginRight: 20,
     },
     listTitle: {
         fontSize: 18,
@@ -149,8 +194,18 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         color: '#5AA6AE',
     },
+    refreshPlusContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    refreshIcon: {
+        marginLeft: 10,
+    },
+    resetIcon: {
+        marginLeft: 10,
+    },
     plusIcon: {
-        marginRight: 10,
+        marginLeft: 10,
     },
     flatlistContainer: {
         flex: 1,
@@ -163,6 +218,12 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         backgroundColor: '#FFFFFF',
         elevation: 5,
+    },
+    loadingMessage: {
+        textAlign: 'center',
+        marginVertical: 20,
+        fontSize: 16,
+        color: '#5AA6AE',
     },
     emptyMessage: {
         textAlign: 'center',
@@ -223,6 +284,7 @@ const styles = StyleSheet.create({
     recommendationContent: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: '#5AA6AE'
+        color: '#5AA6AE',
     },
 });
+
