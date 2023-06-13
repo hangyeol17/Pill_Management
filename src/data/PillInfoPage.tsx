@@ -39,7 +39,7 @@ const PillInfoPage = ({ item_name, array_number }) => {
     );
     const text = await response.text();
     parseString(text, (err, result) => {
-      const fetchedImageUrl = result.response.body[0].items[0].item[0].ITEM_IMAGE[0];
+      const fetchedImageUrl = result?.response?.body[0]?.items[0]?.item[0]?.ITEM_IMAGE[0] || null;
       setImageUrl(fetchedImageUrl || null);
       setLoading(false);
     });
@@ -57,7 +57,10 @@ const PillInfoPage = ({ item_name, array_number }) => {
     );
   }
 
-  const pill = pillData(2); // 2 => array_number 수정
+  let pill = null
+  if (ocrOutput.images && ocrOutput.images[0] && ocrOutput.images[0].fields && ocrOutput.images[0].fields[0]) {
+    pill = pillData(2); // 2 => array_number 수정
+  }
 
   return (
     <View>

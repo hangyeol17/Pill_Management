@@ -1,28 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
-  SafeAreaView,
   View,
   Text,
   Image,
   ActivityIndicator,
   Linking,
   PermissionsAndroid,
-  NativeModules,
 } from 'react-native';
-import {
-  TextInput,
-  Button,
-  TouchableOpacity,
-  TouchableHighlight,
-  Alert,
-} from 'react-native';
-import { Camera, useCameraDevices } from 'react-native-vision-camera';
+import {TouchableOpacity} from 'react-native';
+import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import RNFS from 'react-native-fs';
 
-import * as D from '../data';
-
-export let capturedImagePath = ''
+export let capturedImagePath = '';
 
 export default function Cam() {
   const camera = useRef<Camera>(null);
@@ -83,11 +73,11 @@ export default function Cam() {
     await RNFS.moveFile(data, `${RNFS.PicturesDirectoryPath}/${filename}`);
     const imagePath = `${RNFS.PicturesDirectoryPath}/${filename}`;
     const jsonPath = `${RNFS.PicturesDirectoryPath}/capturedImagePath.json`;
-    const jsonData = JSON.stringify({ capturedImagePath });
+    const jsonData = JSON.stringify({capturedImagePath});
 
     await RNFS.writeFile(jsonPath, jsonData, 'utf8');
     capturedImagePath = imagePath;
-    setImageSource(capturedImagePath)
+    setImageSource(capturedImagePath);
     console.log(`Move Picture to ${imagePath}`);
     console.log(`Exported capturedImagePath to ${jsonPath}`);
   }
@@ -124,22 +114,6 @@ export default function Cam() {
             />
           ) : null}
 
-          <View style={styles.backButton}>
-            <TouchableOpacity
-              style={{
-                backgroundColor: 'rgba(0,0,0,0.2)',
-                padding: 10,
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: 10,
-                borderWidth: 2,
-                borderColor: '#fff',
-                width: 100,
-              }}
-              onPress={() => setShowCamera(true)}>
-              <Text style={{ color: 'white', fontWeight: '500' }}>Back</Text>
-            </TouchableOpacity>
-          </View>
           <View style={styles.buttonContainer}>
             <View style={styles.buttons}>
               <TouchableOpacity
@@ -152,9 +126,9 @@ export default function Cam() {
                   borderWidth: 2,
                   borderColor: '#77c3ec',
                 }}
-                onPress={() => setShowCamera(true)}>
-                <Text style={{ color: '#77c3ec', fontWeight: '500' }}>
-                  Retake
+                onPress={() => {}}>
+                <Text style={{color: '#77c3ec', fontWeight: '500'}}>
+                  Use Photo
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -168,8 +142,8 @@ export default function Cam() {
                   borderColor: 'white',
                 }}
                 onPress={() => setShowCamera(true)}>
-                <Text style={{ color: 'white', fontWeight: '500' }}>
-                  Use Photo
+                <Text style={{color: 'white', fontWeight: '500'}}>
+                  Take Photo
                 </Text>
               </TouchableOpacity>
             </View>

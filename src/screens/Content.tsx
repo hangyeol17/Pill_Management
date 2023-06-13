@@ -5,49 +5,54 @@ import Icon from 'react-native-vector-icons/Feather';
 import ocrOutput from '../OCR/output.json';
 import { imageUrl } from '../data/PillData';
 
-import * as D from '../data';
-
-const name = D.randomName();
-let dataLength = 0;
-const pillData = [];
-
-dataLength = +JSON.stringify(ocrOutput.images[0].fields[0].inferText.split('\n').length);
-
-for (let i = 0; i < dataLength; i++) {
-    const name = JSON.stringify(ocrOutput.images[0].fields[0].inferText.split('\n')[i].split(' ')[0]).replace(/\"/gi, '');
-    const itemImageUrl = `https://nedrug.mfds.go.kr/pbp/cmn/itemImageDownload/150488501735800064`
-    // Access imageUrl based on the item index
-    pillData.push({
-        name,
-        imageUrl: itemImageUrl
-    });
-}
-
 export default function Content() {
     const [news, setNews] = useState([]);
-    const navigation = useNavigation()
+    const navigation = useNavigation();
+    const [pillData, setPillData] = useState([]);
 
     useEffect(() => {
-        fetchHealthNews();
-    }, []);
+        const fetchHealthNews = async () => {
+            const apiKey = '2d208b3439fc448895a9dd7031ffd4ab';
+            const url = `https://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=${apiKey}`;
+            const response = await fetch(url);
+            const result = await response.json();
+            if (result.status === 'ok') {
+                setNews(result.articles);
+            }
+        };
 
-    const fetchHealthNews = async () => {
-        const apiKey = '2d208b3439fc448895a9dd7031ffd4ab';
-        const url = `https://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=${apiKey}`;
-        const response = await fetch(url);
-        const result = await response.json();
-        if (result.status === 'ok') {
-            setNews(result.articles);
-        }
-    };
+        const createPillData = () => {
+            const dataLength = ocrOutput?.images?.[0]?.fields?.[0]?.inferText?.split('\n').length || 0;
+            const pillData = [];
+
+            for (let i = 0; i < dataLength; i++) {
+                const name = ocrOutput?.images?.[0]?.fields?.[0]?.inferText?.split('\n')?.[i]?.split(' ')?.[0]?.replace(/\"/gi, '');
+                const image = imageUrl && imageUrl[i] ? imageUrl[i] : null;
+                pillData.push({
+                    name,
+                    image,
+                });
+            }
+
+            return pillData;
+        };
+
+        fetchHealthNews();
+        const generatedPillData = createPillData();
+        setPillData(generatedPillData);
+    }, []);
 
     const renderPillItem = ({ item }) => {
         return (
             <View>
                 <View style={styles.pillItem}>
                     <Text style={styles.pillText}>{item.name}</Text>
+                    {item.image ? (
+                        <Image source={{ uri: item.image }} style={styles.pillImage} />
+                    ) : (
+                        <Image source={require('../assets/images/pillimg.png')} style={styles.pillImage} />
+                    )}
                 </View>
-                <Image source={{ uri: item.imageUrl }} style={styles.pillImage} />
             </View>
         );
     };
@@ -92,12 +97,16 @@ export default function Content() {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.flatlistContainer}>
-                    <FlatList
-                        data={pillData}
-                        renderItem={renderPillItem}
-                        keyExtractor={(item, index) => index.toString()}
-                        ItemSeparatorComponent={() => <View style={styles.separator} />}
-                    />
+                    {pillData.length > 0 ? (
+                        <FlatList
+                            data={pillData}
+                            renderItem={renderPillItem}
+                            keyExtractor={(item, index) => index.toString()}
+                            ItemSeparatorComponent={() => <View style={styles.separator} />}
+                        />
+                    ) : (
+                        <Text style={styles.emptyMessage}>복용 목록이 비어 있습니다.</Text>
+                    )}
                 </View>
             </View>
             <View style={styles.container}>
@@ -110,9 +119,9 @@ export default function Content() {
                         renderItem={renderItem}
                         keyExtractor={keyExtractor}
                         ItemSeparatorComponent={() => <View style={styles.separator} />}
-                    /></View>
+                    />
+                </View>
             </View>
-            {imageUrl && <Image source={{ uri: imageUrl }} style={{ width: 200, height: 200 }} />}
         </SafeAreaView>
     );
 }
@@ -155,6 +164,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         elevation: 5,
     },
+    emptyMessage: {
+        textAlign: 'center',
+        marginVertical: 20,
+        fontSize: 16,
+        color: '#5AA6AE',
+    },
     pillItem: {
         flex: 1,
         flexDirection: 'row',
@@ -165,14 +180,16 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginVertical: 4,
     },
-    pillImage: {
-        flex: 1
-    },
     pillText: {
+        flex: 1,
         fontSize: 16,
         textAlign: 'left',
         fontWeight: 'bold',
-        color: '#5AA6AE'
+        color: '#5AA6AE',
+    },
+    pillImage: {
+        height: 25,
+        width: 25,
     },
     separator: {
         height: 2,
